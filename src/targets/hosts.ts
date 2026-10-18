@@ -7,11 +7,13 @@ export type Target = { scan(): void; sweep(): void; dispose(): void };
 // handle is null while a host shows no diagram (pele hint, or before the first mount).
 type HostEntry = { anchor: Element; uid: string; handle: DiagramHandle | null };
 
-/** Host lifecycle of one target: a host sits right after its anchor, one watch per block uid. */
+/** Host lifecycle of one target: one watch per block uid; sweep drops hosts that left their place. */
 export const createHosts = <E extends HostEntry>(
   name: string,
   pattern: string,
   refresh: (host: HTMLElement, entry: E) => void,
+  // Whether the host is still where its target put it; default: right after its anchor.
+  inPlace: (host: HTMLElement, entry: E) => boolean = (host, entry) => host.previousElementSibling === entry.anchor,
 ) => {
   const entries = new Map<HTMLElement, E>();
   const registry = new HostRegistry<HTMLElement>((uid, onChange) => watch(pattern, uid, onChange));
@@ -40,9 +42,10 @@ export const createHosts = <E extends HostEntry>(
       registry.add(entry.uid, host, safeRefresh);
     },
     destroy,
+    refresh: safeRefresh,
     sweep(): void {
-      for (const [host, { anchor }] of [...entries]) {
-        if (!host.isConnected || host.previousElementSibling !== anchor) destroy(host);
+      for (const [host, entry] of [...entries]) {
+        if (!host.isConnected || !inPlace(host, entry)) destroy(host);
       }
     },
     dispose(): void {

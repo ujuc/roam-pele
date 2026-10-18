@@ -1,4 +1,5 @@
 import { observeBody } from "./observer.ts";
+import { createCodeTarget } from "./targets/code.ts";
 import { createMermaidTarget } from "./targets/mermaid.ts";
 import { createPeleTarget } from "./targets/pele.ts";
 
@@ -7,7 +8,7 @@ let stop: (() => void) | undefined;
 export default {
   onload() {
     window.__roamPeleCleanup?.();
-    const targets = [createMermaidTarget(), createPeleTarget()];
+    const targets = [createMermaidTarget(), createPeleTarget(), createCodeTarget(() => "Above")];
     const disconnect = observeBody(() => {
       for (const target of targets) {
         target.sweep();

@@ -30,3 +30,7 @@
 .roam-pele:hover .roam-pele__edit {
   opacity: 1;
 }
+
+.roam-pele--code {
+  margin: 8px 0;
+}
