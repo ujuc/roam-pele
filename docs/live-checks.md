@@ -24,3 +24,36 @@ Other observations:
 - `pull("[:block/string :block/order {:block/children ...}]", [":block/uid", uid])` returns keys `:block/string`, `:block/order`, `:block/children` as planned. `pull("[{:block/parents [:block/string]}]", …)` lists ancestor blocks only (the page has no `:block/string`).
 
 No result so far requires changing a user decision (D1–D8).
+
+## Task 12 — full live run (scripts/live-check.js)
+
+Graph `test-graph` (local), Chrome, extension loaded in developer mode from `http://localhost:8765` (check 11 ✅: `dev-load-extension extension: http://localhost:8765/` in the console, `window.__roamPeleCleanup` and the extension CSS present). Script run 2026-10-18, selftest page uid `-q2-3NilJ`. Result: 20 PASS, 1 FAIL, 3 manual.
+
+| Check | Result | Detail |
+|---|---|---|
+| mermaid.render | ✅ | host `--ready`, Roam frame hidden, edge label drawn, `--pele-bg: #ffffff` |
+| mermaid.ref-untouched | ✅ | `.rm-mermaid` in the block ref keeps Roam's drawing, no host |
+| mermaid.empty-help-card | ✅ | help card shown, no host |
+| mermaid.fail-then-recover | ✅ | invalid source → `--failed` + Roam frame visible; fixed → Pele back in ~100 ms |
+| mermaid.grandchild-edit | ✅ | redraw ~100 ms after a grandchild edit |
+| mermaid.sidebar-both-update | ✅ | main + sidebar both update; main still updates after the sidebar window closes |
+| mermaid.edit-button (check 9) | ✅ | synthetic mousedown on the edit button enters edit mode; host back after leaving |
+| mermaid.diagram-click-no-edit | ✅ | clicking the diagram does not enter edit mode |
+| mermaid.one-host-after-rerenders | ✅ | 1 host per frame after collapse/expand ×2 and edit mode; 0 orphans |
+| pele.mindmap | ✅ | outline → `pele-mindmap`, Roam's button hidden |
+| pele.colon-form | ✅ | `{{pele: x}}` renders |
+| pele.empty-hint | ✅ | "Add Mermaid in child blocks" |
+| pele.error-in-place | ✅ | Pele parse error shown in the host |
+| pele.edit-button | ❌ → ✅ | failed: the span wrapping Roam's unknown-component button has a React `onMouseDown` that keeps the click from reaching the block's edit handler (also by real click). Fixed in 89571e5: the edit button calls `roamAlphaAPI.ui.setBlockFocusAndSelection`; after reloading (ctrl-d ctrl-r) both the pele and mermaid edit buttons enter edit mode |
+| code.preview-above | ✅ | first child of `.rm-code-block`; right edge 1229 = code wrapper right edge (no overflow); `--pele-bg: #f5f5f5` |
+| code.two-fences | ✅ | python fence no host, mermaid fence host |
+| code.inside-mermaid-source-skipped | ✅ | code block under `{{[[mermaid]]}}` gets no preview |
+| code.rewritten-form | ✅ | ```` ```javascript\nmermaid ```` still previewed |
+| code.live-typing | ✅ | preview updated ~200 ms after an editor change; block string untouched |
+| load.50-diagrams | ✅ | 30 mermaid + 10 pele + 10 code all rendered in 530 ms; one 280 ms long task while opening; 0 long tasks during 20 edits |
+| unload.cleanup | ✅ | 0 leftovers, Roam's drawing and pele button back, marker gone, second cleanup call safe |
+
+Manual checks (user, 2026-10-18):
+- Settings → Pele: position shows "Above"; the mermaid switch toggles between Roam's drawing and Pele's. ✅
+- `/Pele diagram` inserts `{{[[pele]]}}`. ✅
+- Convert commands: reported as "not converting". Reproduced in Chrome: with the block in edit mode, `Pele: convert to {{[[mermaid]]}}` changed both `:block/string` and the edit textarea. They looked broken because the drawing is identical for both kinds and the command is a silent no-op without an edited block; 89571e5 adds console warnings and README wording.
