@@ -43,4 +43,5 @@ export const buildPeleSource = (root: PullBlock): string => lines(root, true).jo
 export const hasChildren = (root: PullBlock | null): boolean =>
   (root?.[":block/children"]?.length ?? 0) > 0;
 
-export const DIAGRAM_ROOT_RE = /^\s*\{\{\s*(?:\[\[)?(?:mermaid|pele)(?:\]\])?\s*(?::[^}]*)?\}\}\s*$/;
+// Unanchored: Roam renders the component token wherever it appears in the block text.
+export const DIAGRAM_ROOT_RE = /\{\{\s*(?:\[\[)?(?:mermaid|pele)(?:\]\])?\s*(?::[^}]*)?\}\}/;

@@ -38,6 +38,6 @@ test("hasChildren", () => {
   assert.equal(hasChildren(tree), true);
 });
 test("DIAGRAM_ROOT_RE", () => {
-  for (const s of ["{{mermaid}}", "{{[[mermaid]]}}", "{{ [[pele]] }}", "{{pele: x}}"]) assert.match(s, DIAGRAM_ROOT_RE);
+  for (const s of ["{{mermaid}}", "{{[[mermaid]]}}", "{{ [[pele]] }}", "{{pele: x}}", "Architecture {{mermaid}}", "{{[[pele]]}} caption"]) assert.match(s, DIAGRAM_ROOT_RE);
   for (const s of ["mermaid", "{{[[kroki]]: mermaid:((abc))}}", "{{[[TODO]]}}"]) assert.doesNotMatch(s, DIAGRAM_ROOT_RE);
 });
