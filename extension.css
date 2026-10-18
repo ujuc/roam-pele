@@ -1,0 +1,24 @@
+.rm-full-width:has(+ .roam-pele--mermaid.roam-pele--ready) {
+  display: none !important;
+}
+
+.roam-pele--failed {
+  display: none;
+}
+
+.roam-pele {
+  display: block;
+  position: relative;
+  width: 100%;
+}
+
+.roam-pele__edit {
+  position: absolute;
+  top: 0;
+  right: 0;
+  opacity: 0;
+}
+
+.roam-pele:hover .roam-pele__edit {
+  opacity: 1;
+}
