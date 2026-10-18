@@ -57,3 +57,4 @@ Manual checks (user, 2026-10-18):
 - Settings → Pele: position shows "Above"; the mermaid switch toggles between Roam's drawing and Pele's. ✅
 - `/Pele diagram` inserts `{{[[pele]]}}`. ✅
 - Convert commands: reported as "not converting". Reproduced in Chrome: with the block in edit mode, `Pele: convert to {{[[mermaid]]}}` changed both `:block/string` and the edit textarea. They looked broken because the drawing is identical for both kinds and the command is a silent no-op without an edited block; 89571e5 adds console warnings and README wording.
+- Settings → "Code block preview position" = Below moves code previews under the language bar (user, 2026-10-18). ✅
