@@ -10,6 +10,16 @@ export const readSettings = (api: { settings: { get(key: string): unknown } }): 
   position: api.settings.get(KEYS.position) === "Below" ? "Below" : "Above",
 });
 
+// A Roam switch with no stored value renders off, so store the defaults once for what readSettings treats as on.
+export const seedDefaults = async (api: {
+  settings: { canSet?: boolean; get(key: string): unknown; set(key: string, value: unknown): Promise<unknown> };
+}): Promise<void> => {
+  if (!api.settings.canSet) return;
+  const defaults = { [KEYS.mermaid]: true, [KEYS.code]: true, [KEYS.position]: "Above" };
+  for (const [key, value] of Object.entries(defaults))
+    if (api.settings.get(key) == null) await api.settings.set(key, value);
+};
+
 type PanelApi = {
   settings: {
     get(key: string): unknown;

@@ -1,6 +1,6 @@
 import { registerCommands } from "./commands.ts";
 import { observeBody } from "./observer.ts";
-import { createPanel, readSettings, type Position } from "./settings.ts";
+import { createPanel, readSettings, seedDefaults, type Position } from "./settings.ts";
 import { createCodeTarget } from "./targets/code.ts";
 import type { Target } from "./targets/hosts.ts";
 import { createMermaidTarget } from "./targets/mermaid.ts";
@@ -18,7 +18,13 @@ const guarded = (name: string, work: () => void): void => {
 };
 
 export default {
-  onload({ extensionAPI }: { extensionAPI: Parameters<typeof registerCommands>[0] & Parameters<typeof createPanel>[0] }) {
+  onload({
+    extensionAPI,
+  }: {
+    extensionAPI: Parameters<typeof registerCommands>[0] &
+      Parameters<typeof createPanel>[0] &
+      Parameters<typeof seedDefaults>[0];
+  }) {
     window.__roamPeleCleanup?.();
     const targets = new Map<string, Target>();
     let position: Position = "Above";
@@ -71,7 +77,11 @@ export default {
     stop = cleanup;
     window.__roamPeleCleanup = cleanup;
     registerCommands(extensionAPI);
-    createPanel(extensionAPI, apply).catch((e) => console.error("roam-pele: settings panel failed", e));
+    // Seed before the panel so its switches show the defaults; the targets already read unset as the default.
+    seedDefaults(extensionAPI)
+      .catch((e) => console.error("roam-pele: seeding settings failed", e))
+      .then(() => (stopped ? undefined : createPanel(extensionAPI, apply)))
+      .catch((e) => console.error("roam-pele: settings panel failed", e));
   },
   onunload() {
     stop?.();

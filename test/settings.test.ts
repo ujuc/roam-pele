@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { createPanel, KEYS, readSettings } from "../src/settings.ts";
+import { createPanel, KEYS, readSettings, seedDefaults } from "../src/settings.ts";
 
 const store = (values: Record<string, unknown>) => ({ settings: { get: (key: string) => values[key] ?? null } });
 
@@ -40,4 +40,32 @@ test("onChange saves the new value before applying", async () => {
     "set code-position=Below",
     "apply",
   ]);
+});
+
+const seedApi = (values: Record<string, unknown>, canSet: boolean) => {
+  const written: Record<string, unknown> = {};
+  const settings = {
+    canSet,
+    get: (key: string) => values[key] ?? null,
+    set: async (key: string, value: unknown) => void (written[key] = value),
+  };
+  return { api: { settings }, written };
+};
+
+test("seedDefaults stores the defaults for unset keys", async () => {
+  const { api, written } = seedApi({}, true);
+  await seedDefaults(api);
+  assert.deepEqual(written, { [KEYS.mermaid]: true, [KEYS.code]: true, [KEYS.position]: "Above" });
+});
+
+test("seedDefaults keeps existing values", async () => {
+  const { api, written } = seedApi({ [KEYS.mermaid]: false, [KEYS.position]: "Below" }, true);
+  await seedDefaults(api);
+  assert.deepEqual(written, { [KEYS.code]: true });
+});
+
+test("seedDefaults writes nothing when settings cannot be set", async () => {
+  const { api, written } = seedApi({}, false);
+  await seedDefaults(api);
+  assert.deepEqual(written, {});
 });
