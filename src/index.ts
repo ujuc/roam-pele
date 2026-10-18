@@ -1,3 +1,4 @@
+import { registerCommands } from "./commands.ts";
 import { observeBody } from "./observer.ts";
 import { createCodeTarget } from "./targets/code.ts";
 import { createMermaidTarget } from "./targets/mermaid.ts";
@@ -6,7 +7,7 @@ import { createPeleTarget } from "./targets/pele.ts";
 let stop: (() => void) | undefined;
 
 export default {
-  onload() {
+  onload({ extensionAPI }: { extensionAPI: Parameters<typeof registerCommands>[0] }) {
     window.__roamPeleCleanup?.();
     const targets = [createMermaidTarget(), createPeleTarget(), createCodeTarget(() => "Above")];
     const disconnect = observeBody(() => {
@@ -24,6 +25,7 @@ export default {
     };
     stop = cleanup;
     window.__roamPeleCleanup = cleanup;
+    registerCommands(extensionAPI);
   },
   onunload() {
     stop?.();

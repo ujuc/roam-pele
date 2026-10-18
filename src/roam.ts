@@ -35,3 +35,10 @@ export const isInsideDiagramSource = (uid: string): boolean => {
     window.roamAlphaAPI.data.pull("[{:block/parents [:block/string]}]", eidOf(uid))?.[":block/parents"] ?? [];
   return parents.some((p) => DIAGRAM_ROOT_RE.test(p[":block/string"] ?? ""));
 };
+
+export const focusedBlockUid = (): string | null =>
+  window.roamAlphaAPI.ui.getFocusedBlock()?.["block-uid"] ?? null;
+
+// The only graph write in the extension; callers run it on explicit user command.
+export const updateBlockString = (uid: string, string: string): Promise<unknown> =>
+  window.roamAlphaAPI.data.block.update({ block: { uid, string } });
