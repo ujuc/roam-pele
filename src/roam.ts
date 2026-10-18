@@ -9,9 +9,24 @@ const INPUT_PREFIX = "block-input-";
 export const uidFromInputId = (id: string): string | null =>
   id.startsWith(INPUT_PREFIX) ? id.slice(-9) : null;
 
+// Input id is `block-input-<windowId>-<uid>`; the window id may itself contain dashes.
+export const windowIdFromInputId = (id: string): string | null =>
+  (id.startsWith(INPUT_PREFIX) && id.slice(INPUT_PREFIX.length, -10)) || null;
+
 export const blockUidOf = (el: Element): string | null => {
   const id = el.closest('[id^="block-input-"]')?.id;
   return id ? uidFromInputId(id) : null;
+};
+
+// Roam's own click-to-edit can be swallowed (a span around `{{[[pele]]}}` eats mousedown), so enter edit mode explicitly.
+export const focusBlock = (el: Element): void => {
+  const id = el.closest('[id^="block-input-"]')?.id;
+  const uid = id && uidFromInputId(id);
+  const windowId = id && windowIdFromInputId(id);
+  if (!uid || !windowId) return;
+  Promise.resolve(
+    window.roamAlphaAPI.ui.setBlockFocusAndSelection({ location: { "block-uid": uid, "window-id": windowId } }),
+  ).catch((e: unknown) => console.warn("roam-pele: focus failed", e));
 };
 
 const eidOf = (uid: string): [":block/uid", string] => [":block/uid", uid];

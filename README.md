@@ -68,7 +68,7 @@ Changes apply without reloading. Disabling the extension also restores Roam's ow
 ## Commands
 
 - Slash command "Pele diagram" inserts `{{[[pele]]}}`.
-- Command palette "Pele: convert to {{[[pele]]}}" and "Pele: convert to {{[[mermaid]]}}" replace the first `{{mermaid}}` or `{{pele}}` token in the focused block with the other component. They change only that token and leave the rest of the block and its children alone. Converting to `{{[[mermaid]]}}` drops the meaning of nested indentation.
+- Command palette "Pele: convert to {{[[pele]]}}" and "Pele: convert to {{[[mermaid]]}}" replace the first `{{mermaid}}` or `{{pele}}` token in the block you are editing (cursor in the block) with the other component. They do nothing when no block is being edited. They change only that token and leave the rest of the block and its children alone. The drawing looks the same after converting, because Pele draws both kinds; the difference is that `{{[[pele]]}}` skips mermaid.js and keeps indentation, while converting to `{{[[mermaid]]}}` drops the meaning of nested indentation.
 
 ## Notes and limits
 

@@ -195,12 +195,15 @@ Roam Depot
   and the diagram area's `dont-focus-block` blocks click-to-edit there. So
   `button.roam-pele__edit` re-creates the native affordance: a hover-only
   Blueprint edit button (`bp3-icon-edit`, top-right, like Roam's
-  `div.hoveronly`). Because neither it nor any ancestor carries
-  `dont-focus-block`, its mousedown/click reaches Roam's block handler and Roam
-  enters edit mode as it does natively. The diagram area keeps
+  `div.hoveronly`). Its click calls
+  `roamAlphaAPI.ui.setBlockFocusAndSelection` for the block (its mousedown is
+  stopped and default-prevented), so it does not rely on bubbling to Roam's
+  click-to-edit handler. *Live finding:* for `{{[[pele]]}}` the host sits inside
+  the span around Roam's unknown-component button, whose React `onMouseDown`
+  swallows the event, so bubbling never reached the block. The diagram area keeps
   `dont-focus-block` (links and text selection work, as in native). This
   restores a native function; it is not the "editing UI" non-goal.
-  *(my call; verify live, §9)* Same structure for §5.2.
+  Same structure for §5.2.
 - Updates: one recursive `addPullWatch` per root uid, debounced, refreshing all
   hosts for that uid. Remove the watch (with all three args) when no host for
   that uid remains.

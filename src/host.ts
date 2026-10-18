@@ -1,3 +1,5 @@
+import { focusBlock } from "./roam.ts";
+
 export type HostKind = "mermaid" | "pele" | "code";
 
 const div = (className: string): HTMLDivElement => {
@@ -19,6 +21,12 @@ export const createHost = (kind: HostKind): { host: HTMLDivElement; diagram: HTM
   edit.type = "button";
   edit.className = "roam-pele__edit bp3-button bp3-minimal bp3-small bp3-icon-edit";
   edit.title = "Edit";
+  // Roam's handlers must not see the press (and the button must not take focus); click also covers the keyboard.
+  edit.addEventListener("mousedown", (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+  });
+  edit.addEventListener("click", () => focusBlock(host));
   const diagram = div("roam-pele__diagram dont-focus-block");
   host.append(edit, diagram);
   return { host, diagram };

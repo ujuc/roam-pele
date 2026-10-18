@@ -7,6 +7,8 @@ const TOKEN_RE: Record<Name, RegExp> = {
   mermaid: /\{\{\s*(?:\[\[)?pele(?:\]\])?\s*(?::[^}]*)?\}\}/,
 };
 
+const OTHER: Record<Name, Name> = { pele: "mermaid", mermaid: "pele" };
+
 // Rewrites the first token of the other name to `to`; null when there is none.
 export const convertToken = (s: string, to: Name): string | null => {
   const re = TOKEN_RE[to];
@@ -15,9 +17,11 @@ export const convertToken = (s: string, to: Name): string | null => {
 
 const convertFocused = (to: Name) => async () => {
   const uid = focusedBlockUid();
-  const current = uid && pullString(uid);
+  if (!uid) return console.warn("roam-pele: convert needs a block in edit mode");
+  const current = pullString(uid);
   const next = current ? convertToken(current, to) : null;
-  if (uid && next !== null) await updateBlockString(uid, next);
+  if (next === null) return console.warn(`roam-pele: no {{${OTHER[to]}}} token in the focused block`);
+  await updateBlockString(uid, next);
 };
 
 type Api = {
