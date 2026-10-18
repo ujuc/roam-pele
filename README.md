@@ -82,15 +82,60 @@ Changes apply without reloading. Disabling the extension also restores Roam's ow
 
 ## Privacy
 
-No network requests, and no remotely loaded code. It never writes to your pages or blocks, except when you run one of the two convert commands. It stores its own three settings with the graph.
+The extension makes no network requests of its own and loads no remote code. What you write in a diagram can still point outside the graph: an image URL in a Mermaid image shape (for example `A@{ img: "https://…" }`) is loaded by the browser when the diagram is drawn, for everyone who opens the page with the extension on, and `click` links in a diagram open when clicked (`javascript:` links are blocked). It never writes to your pages or blocks, except when you run one of the two convert commands. It stores its own three settings with the graph.
 
 ## Bundled dependency
 
-[`pele@1.6.0`](https://www.npmjs.com/package/pele) (MIT), bundled into `extension.js`: about 677 KB minified, about 250 KB gzipped. After `npm run build`, the whole `extension.js` is about 930 KB (about 280 KB gzipped). The rest of the extension is readable, unminified code in `src/`.
+[`pele@1.6.0`](https://www.npmjs.com/package/pele) (MIT), bundled into `extension.js`. Pele ships minified only (its `dist/pele.js` is about 678 KB). The build prints it again with line breaks but keeps its short names, so after `npm run build` Pele takes about 934 KB of the 953 KB `extension.js` (about 287 KB gzipped). The extension's own code is the other 19 KB or so, readable and unminified (source in `src/`).
 
 ## License
 
-roam-pele is MIT licensed, Copyright (c) 2026 sungjin (see `LICENSE`). The bundled Pele is MIT licensed, Copyright (c) 2026 kepano, and its notice is kept at the top of `extension.js`.
+roam-pele is MIT licensed, Copyright (c) 2026 sungjin (see `LICENSE`).
+
+The bundled Pele is MIT licensed, Copyright (c) 2026 kepano, and contains one Lucide icon under the ISC License. A one-line attribution is kept at the top of `extension.js`. Pele's licence in full:
+
+```
+MIT License
+
+Copyright (c) 2026 kepano
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+---
+
+The reset icon of the zoom controls is "rotate-ccw" from Lucide v1.14.0
+(https://lucide.dev), under the ISC License:
+
+Copyright (c) 2026 Lucide Icons and Contributors
+
+Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without fee is hereby granted, provided that the above
+copyright notice and this permission notice appear in all copies.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+```
 
 ## Development
 
