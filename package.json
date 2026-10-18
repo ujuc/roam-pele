@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "esbuild src/index.ts --bundle --format=esm --target=es2022 --platform=browser --outfile=extension.js",
+    "build": "esbuild src/index.ts --bundle --format=esm --target=es2022 --platform=browser --banner:js=\"/*! pele 1.6.0 | MIT License | Copyright (c) 2026 kepano | https://github.com/obsidianmd/pele */\" --outfile=extension.js",
     "check": "tsc --noEmit -p .",
     "test": "node --test \"test/**/*.test.ts\"",
     "serve": "node scripts/serve.mjs"

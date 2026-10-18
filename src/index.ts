@@ -36,7 +36,7 @@ export default {
       if (on === (current !== undefined)) return;
       if (current) {
         targets.delete(name);
-        current.dispose();
+        guarded(name, () => current.dispose());
       } else {
         const target = make();
         targets.set(name, target);
@@ -50,8 +50,9 @@ export default {
       if (settings.position !== position) {
         position = settings.position;
         // The code target reads the position only when it mounts, so recreate it to move existing previews.
-        targets.get("code")?.dispose();
+        const code = targets.get("code");
         targets.delete("code");
+        if (code) guarded("code", () => code.dispose());
       }
       sync("mermaid", settings.mermaid, createMermaidTarget);
       sync("pele", true, createPeleTarget);
@@ -69,8 +70,10 @@ export default {
     const cleanup = () => {
       stopped = true;
       disconnect();
-      for (const target of targets.values()) target.dispose();
+      for (const [name, target] of targets) guarded(name, () => target.dispose());
       targets.clear();
+      // A failed dispose can leave hosts behind.
+      document.querySelectorAll("[data-roam-pele]").forEach((e) => e.remove());
       // Only clear our own marker; a newer instance may have replaced it.
       if (window.__roamPeleCleanup === cleanup) delete window.__roamPeleCleanup;
     };

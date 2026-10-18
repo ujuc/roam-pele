@@ -27,7 +27,8 @@
   opacity: 0;
 }
 
-.roam-pele:hover .roam-pele__edit {
+.roam-pele:hover .roam-pele__edit,
+.roam-pele__edit:focus-visible {
   opacity: 1;
 }
 

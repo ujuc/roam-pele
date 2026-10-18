@@ -1,7 +1,7 @@
 # roam-pele — Design
 
 Date: 2026-10-18
-Status: draft, awaiting approval
+Status: approved 2026-10-18
 
 A Roam Research extension, published through Roam Depot, that draws Mermaid
 diagrams with [Pele](https://pele.run) (`obsidianmd/pele`, npm `pele`) instead
