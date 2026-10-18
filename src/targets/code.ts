@@ -10,9 +10,12 @@ const HOST_CLASS = "roam-pele--code";
 const STRING_PATTERN = "[:block/string]";
 
 // Live editor doc through a CodeMirror internal; undefined when that path is gone.
-const liveDoc = (codeBlock: Element): string | undefined => {
-  const doc = (codeBlock.querySelector(".cm-content") as any)?.cmView?.rootView?.view?.state?.doc?.toString();
-  return typeof doc === "string" ? doc : undefined;
+// Scans run on every keystroke, so only the first line decides before the full text is read.
+const liveSource = (codeBlock: Element): string | null | undefined => {
+  const doc = (codeBlock.querySelector(".cm-content") as any)?.cmView?.rootView?.view?.state?.doc;
+  const first = doc?.line?.(1)?.text;
+  if (typeof first !== "string") return undefined;
+  return first.trim() === "mermaid" ? docMermaidSource(doc.toString()) : null;
 };
 
 // Saved-string fallback: the n-th code block of a block is the n-th fence of its string.
@@ -25,8 +28,8 @@ const savedSource = (codeBlock: Element, uid: string): string | null => {
 };
 
 const sourceOf = (codeBlock: Element, uid: string): string | null => {
-  const doc = liveDoc(codeBlock);
-  return doc === undefined ? savedSource(codeBlock, uid) : docMermaidSource(doc);
+  const live = liveSource(codeBlock);
+  return live === undefined ? savedSource(codeBlock, uid) : live;
 };
 
 export const createCodeTarget = (position: () => "Above" | "Below"): Target => {

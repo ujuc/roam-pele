@@ -8,7 +8,7 @@ export const observeBody = (onChange: () => void, delayMs = 100): (() => void) =
     clearTimeout(timer);
     timer = setTimeout(onChange, delayMs);
   });
-  observer.observe(document.body, { childList: true, subtree: true });
+  observer.observe(document.body, { childList: true, characterData: true, subtree: true });
   return () => {
     observer.disconnect();
     clearTimeout(timer);
