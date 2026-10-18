@@ -2,8 +2,11 @@
   display: none !important;
 }
 
-.roam-pele--failed {
-  display: none;
+/* Not display:none: Pele skips rendering at zero width, so a hidden host could never recover. */
+.roam-pele.roam-pele--failed {
+  visibility: hidden;
+  height: 0;
+  overflow: hidden;
 }
 
 .roam-pele {
