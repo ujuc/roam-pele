@@ -1,0 +1,80 @@
+.rm-full-width:has(+ .roam-pele--mermaid.roam-pele--ready) {
+  display: none !important;
+}
+
+/* Roam renders {{[[pele]]}} as an inert button; hide it while our host follows it. */
+.rm-xparser-default-pele:has(+ .roam-pele--pele) {
+  display: none;
+}
+
+/* Not display:none: Pele skips rendering at zero width, so a hidden host could never recover. */
+.roam-pele.roam-pele--failed {
+  visibility: hidden;
+  height: 0;
+  overflow: hidden;
+}
+
+.roam-pele {
+  display: block;
+  position: relative;
+  width: 100%;
+}
+
+.roam-pele__edit {
+  position: absolute;
+  top: 0;
+  right: 0;
+  opacity: 0;
+}
+
+.roam-pele:hover .roam-pele__edit,
+.roam-pele__edit:focus-visible {
+  opacity: 1;
+}
+
+.roam-pele--code {
+  margin: 8px 0;
+}
+
+/* Theme: Pele reads its colours from --pele-* variables. Light values follow Roam's Blueprint palette. */
+.roam-pele {
+  --pele-bg: #ffffff; /* solid: Pele fills labels and boxes with it to mask the lines behind them */
+  --pele-fg: #202b33;
+  --pele-muted: #5c7080;
+  --pele-line: #5c7080;
+  --pele-surface: #ebf1f5;
+  --pele-surface-alt: #e1e8ed;
+  --pele-border: #bfccd6;
+  --pele-accent: #106ba3;
+  --pele-critical: #db3737;
+  --pele-error: #db3737;
+}
+
+/* Roam's light code block background. */
+.roam-pele--code {
+  --pele-bg: #f5f5f5;
+}
+
+.bp3-dark .roam-pele,
+.rs-dark .roam-pele,
+.rm-dark-theme .roam-pele,
+.roamjs-custom-dark-theme .roam-pele {
+  --pele-bg: #202b33; /* Roam's dark page background */
+  --pele-fg: #f5f8fa;
+  --pele-muted: #a7b6c2;
+  --pele-line: #a7b6c2;
+  --pele-surface: #394b59;
+  --pele-surface-alt: #30404d;
+  --pele-border: #5c7080;
+  --pele-accent: #48aff0;
+  --pele-critical: #ff7373;
+  --pele-error: #ff7373;
+}
+
+/* Roam's dark code block background (rgba(16, 22, 26, 0.3) over the page). Last, so it beats the rules above. */
+.bp3-dark .roam-pele--code,
+.rs-dark .roam-pele--code,
+.rm-dark-theme .roam-pele--code,
+.roamjs-custom-dark-theme .roam-pele--code {
+  --pele-bg: #1b252c;
+}
