@@ -34,3 +34,32 @@
 .roam-pele--code {
   margin: 8px 0;
 }
+
+/* Theme: Pele reads its colours from --pele-* variables. Light values follow Roam's Blueprint palette. */
+.roam-pele {
+  --pele-bg: transparent; /* the diagram sits on the page or code block background */
+  --pele-fg: #202b33;
+  --pele-muted: #5c7080;
+  --pele-line: #5c7080;
+  --pele-surface: #ebf1f5;
+  --pele-surface-alt: #e1e8ed;
+  --pele-border: #bfccd6;
+  --pele-accent: #106ba3;
+  --pele-critical: #db3737;
+  --pele-error: #db3737;
+}
+
+.bp3-dark .roam-pele,
+.rs-dark .roam-pele,
+.rm-dark-theme .roam-pele,
+.roamjs-custom-dark-theme .roam-pele {
+  --pele-fg: #f5f8fa;
+  --pele-muted: #a7b6c2;
+  --pele-line: #a7b6c2;
+  --pele-surface: #394b59;
+  --pele-surface-alt: #30404d;
+  --pele-border: #5c7080;
+  --pele-accent: #48aff0;
+  --pele-critical: #ff7373;
+  --pele-error: #ff7373;
+}
