@@ -1,6 +1,10 @@
-# Roam Depot submission (draft, not submitted)
+# Roam Depot submission
 
-- Metadata file: [`roam-pele.json`](roam-pele.json), to be added to a fork of
+Submitted 2026-10-18 as
+[Roam-Research/roam-depot#1506](https://github.com/Roam-Research/roam-depot/pull/1506)
+from the fork branch `ujuc:add-roam-pele`.
+
+- Metadata file: [`roam-pele.json`](roam-pele.json), added to
   [Roam-Research/roam-depot](https://github.com/Roam-Research/roam-depot) as
   `extensions/ujuc/roam-pele.json`. Depot extension id: `ujuc+roam-pele`
   (matches Depot's `^[A-Za-z0-9_+-]+$` check).
@@ -12,14 +16,14 @@
   field; Depot builds and publishes the `source_commit`.
 - No `stripe_account`: the extension is free.
 
-Steps, each needing the maintainer's go-ahead:
+Steps:
 
-1. Fork roam-depot, add the file, open a PR against `main`. Depot's PR workflow
+1. Done: fork roam-depot, add the file, open a PR against `main`. Depot's PR workflow
    (`prBuild.yaml`) clones `source_repo`, checks out `source_commit`, runs
    `./build.sh`, and uploads `README.md`, `CHANGELOG.md`, `extension.js`,
    `extension.css`.
 2. When the bot comments, install the Depot-built artifact from its
-   PR-shorthand (`ujuc+roam-pele+<PR#>`) on a fresh graph and check the
+   PR-shorthand (`ujuc+roam-pele+1506`) on a fresh graph and check the
    settings panel, a first render, unload, and how the README renders inside
    Roam. Reviewers ask for this
    ([#887](https://github.com/Roam-Research/roam-depot/pull/887),
