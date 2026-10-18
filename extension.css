@@ -2,6 +2,11 @@
   display: none !important;
 }
 
+/* Roam renders {{[[pele]]}} as an inert button; hide it while our host follows it. */
+.rm-xparser-default-pele:has(+ .roam-pele--pele) {
+  display: none;
+}
+
 /* Not display:none: Pele skips rendering at zero width, so a hidden host could never recover. */
 .roam-pele.roam-pele--failed {
   visibility: hidden;
