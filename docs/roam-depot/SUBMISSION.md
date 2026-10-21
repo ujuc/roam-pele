@@ -1,25 +1,29 @@
-# Roam Depot submission (draft, not submitted)
+# Roam Depot submission
 
-- Metadata file: [`roam-pele.json`](roam-pele.json), to be added to a fork of
+Submitted 2026-10-18 as
+[Roam-Research/roam-depot#1506](https://github.com/Roam-Research/roam-depot/pull/1506)
+from the fork branch `ujuc:add-roam-pele`.
+
+- Metadata file: [`roam-pele.json`](roam-pele.json), added to
   [Roam-Research/roam-depot](https://github.com/Roam-Research/roam-depot) as
   `extensions/ujuc/roam-pele.json`. Depot extension id: `ujuc+roam-pele`
   (matches Depot's `^[A-Za-z0-9_+-]+$` check).
-- `source_commit`: `dc36acf9e5dbfce811a84b12826a63688a79fc7a`, the merge of
-  ujuc/roam-pele#1 into `main`. **Replace it before submitting**: `dc36acf`
-  has the old README (see Open items, "Fixed after `dc36acf`"). Use the `main`
-  commit that contains those fixes once they are merged.
+- `source_commit`: `4022fa35df4464b91798bff91dade1bc4adff581`, the merge of
+  ujuc/roam-pele#2 into `main`. It has the same `src/` as `dc36acf` (the merge
+  of ujuc/roam-pele#1, where the measurements below were taken) plus the README
+  fixes listed under Open items, "Fixed after `dc36acf`".
 - Version: 0.1.0 (`package.json`, `CHANGELOG.md`). Depot metadata has no version
   field; Depot builds and publishes the `source_commit`.
 - No `stripe_account`: the extension is free.
 
-Steps, each needing the maintainer's go-ahead:
+Steps:
 
-1. Fork roam-depot, add the file, open a PR against `main`. Depot's PR workflow
+1. Done: fork roam-depot, add the file, open a PR against `main`. Depot's PR workflow
    (`prBuild.yaml`) clones `source_repo`, checks out `source_commit`, runs
    `./build.sh`, and uploads `README.md`, `CHANGELOG.md`, `extension.js`,
    `extension.css`.
 2. When the bot comments, install the Depot-built artifact from its
-   PR-shorthand (`ujuc+roam-pele+<PR#>`) on a fresh graph and check the
+   PR-shorthand (`ujuc+roam-pele+1506`) on a fresh graph and check the
    settings panel, a first render, unload, and how the README renders inside
    Roam. Reviewers ask for this
    ([#887](https://github.com/Roam-Research/roam-depot/pull/887),
@@ -38,7 +42,7 @@ the edit buttons were rechecked.
 | Public repo Depot can clone | `ujuc/roam-pele` is public. | `gh repo view` → `PUBLIC` |
 | `README.md` (required), `CHANGELOG.md`, `extension.css` | All three are in the repo root. | `git ls-files` |
 | One ESM `extension.js` with a default export `{onload, onunload}` | esbuild `--bundle --format=esm`, no code splitting, so there is one file. `extension.js` is built, not committed (`.gitignore`). | Bundle ends with `export { index_default as default }`; `src/index.ts:20-93` |
-| `build.sh` finishes inside the 5-minute job | `build.sh` runs `npm ci` and `npm run build`. A fresh clone of `dc36acf` with an empty npm cache built in about 2.1-2.2 s (esbuild itself ~40 ms); three builds gave the same SHA-256 `c36854c7…dfeb8`. The lockfile (v3) includes `@esbuild/linux-x64`. The `ubuntu-24.04` runner ships Node 22 and npm 10, which meets Pele's `node >=20`. | `/usr/bin/time ./build.sh`; actions/runner-images Ubuntu 24.04 readme |
+| `build.sh` finishes inside the 5-minute job | `build.sh` runs `npm ci` and `npm run build`. A fresh clone of `dc36acf` with an empty npm cache built in about 2.1-2.2 s (esbuild itself ~40 ms); three builds gave the same SHA-256 `c36854c7…dfeb8`, and a cold build of `4022fa3` gives the same file (2.3 s). The lockfile (v3) includes `@esbuild/linux-x64`. The `ubuntu-24.04` runner ships Node 22 and npm 10, which meets Pele's `node >=20`. | `/usr/bin/time ./build.sh`; actions/runner-images Ubuntu 24.04 readme |
 | No remotely loaded code | No `import()`, `<script>` injection, `eval` or `new Function` anywhere in `extension.js`, Pele included. All code ships in the bundle. | grep over `extension.js` |
 | Network | The extension's code makes no requests: no `fetch`, `XMLHttpRequest`, `sendBeacon`, `WebSocket` or `EventSource` in `extension.js`. **But** Pele is mounted with default options (`src/diagram.ts:11`), so an image URL written in a diagram's source (for example a flowchart node `A@{ img: "https://…" }`) becomes an SVG `<image href>`, which the browser loads when the diagram renders. Mermaid `click … href` links stay live and navigate on click (`javascript:` is blocked). README Privacy says both. | Pele 1.6.0 `render()` probe; `extension.js:1269-1281` (`images` option, http/https allowed) |
 | Graph text never reaches the DOM unescaped | The extension's own DOM is built with `createElement`, `className` and `textContent`. Pele writes its SVG with `innerHTML` but escapes labels and sanitises links: a probe with `<img src=x onerror=…>` in a label and a `javascript:` click produced neither in the output. Reviewers check this ([#1056](https://github.com/Roam-Research/roam-depot/pull/1056)). | `src/host.ts`; Pele `render()` probe |
