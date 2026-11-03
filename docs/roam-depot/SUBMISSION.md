@@ -2,7 +2,63 @@
 
 Submitted 2026-10-18 as
 [Roam-Research/roam-depot#1506](https://github.com/Roam-Research/roam-depot/pull/1506)
-from the fork branch `ujuc:add-roam-pele`.
+from the fork branch `ujuc:add-roam-pele`. Merged 2026-10-27 (`0da6afa`), so
+0.1.0 (`4022fa3`) is published. Later versions go out as update PRs; see
+[Updates](#updates).
+
+## Updates
+
+Depot builds whatever `source_commit` points at, so a release is: merge the
+change into `main` here, then open a roam-depot PR that changes only
+`source_commit` in `extensions/ujuc/roam-pele.json` to that merge commit.
+Depot's README covers only the first submission; it has no separate update
+procedure.
+
+### 0.2.0: Pele 1.6.0 → 1.13.0
+
+Measured on the branch before merging (Linux, Node 22):
+
+- `npm run check`, `npm test` (38 pass) and `./build.sh` succeed. Two cold
+  builds give the same SHA-256 `3607c5c0…1d364`.
+- `extension.js` is 1,023,837 bytes (~311 kB gzipped): Pele 1,004,917 bytes,
+  own code 18,920 bytes. Pele's `dist/pele.js` is 729,332 bytes.
+- Pele's `LICENSE` is unchanged from 1.6.0 (README copy matches), and it still
+  needs `node >=20`.
+- Still no `import()`, `eval`, `new Function`, `fetch`, `XMLHttpRequest`,
+  `sendBeacon`, `WebSocket` or `EventSource` in `extension.js`.
+- `render()` probe: an `<img onerror>` label and a `javascript:` click are not
+  in the output; an image shape URL still becomes `<image>` (as README
+  Privacy says).
+- `mount()` options used here (`zoom`, `fontSize`, `onRender`, `onError`) and
+  `update`/`destroy` are unchanged; Pele's API changes in 1.7.0-1.13.0 only add
+  things (`mermaidType`, `math`, `monospace`).
+- Not checked live in Roam yet.
+
+Steps:
+
+1. Merge the 0.2.0 PR into `main` and note the merge commit.
+2. In the `ujuc/roam-depot` fork, branch from upstream `main`, set
+   `source_commit` in `extensions/ujuc/roam-pele.json` to that commit (the
+   rest of the file stays as in [`roam-pele.json`](roam-pele.json)), and open a
+   PR titled "Update Mermaid with Pele to 0.2.0".
+3. When the bot posts the PR-shorthand, install it on a test graph and check a
+   first render, dark theme labels on `classDef` fills, and unload.
+4. Update `source_commit` in [`roam-pele.json`](roam-pele.json) here.
+
+Draft PR description:
+
+> Update Mermaid with Pele (`ujuc/roam-pele`) to 0.2.0
+>
+> - Bundled Pele 1.6.0 → 1.13.0
+>   ([release notes](https://github.com/obsidianmd/pele/releases)): readable
+>   labels on custom fills in dark themes, palette theme variables for chart
+>   colours, more HTML tags in labels, fewer edge crossings.
+> - No change to the extension's own code (`src/`), settings or permissions.
+>   Still no remotely loaded code and no network requests of its own.
+> - `extension.js` grows from about 953 kB to about 1,024 kB; the extension's
+>   own code is still about 19 kB, unminified.
+
+## First submission (0.1.0)
 
 - Metadata file: [`roam-pele.json`](roam-pele.json), added to
   [Roam-Research/roam-depot](https://github.com/Roam-Research/roam-depot) as

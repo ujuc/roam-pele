@@ -86,7 +86,7 @@ The extension makes no network requests of its own and loads no remote code. Wha
 
 ## Bundled dependency
 
-[`pele@1.6.0`](https://www.npmjs.com/package/pele) (MIT), bundled into `extension.js`. Pele ships minified only (its `dist/pele.js` is about 678 KB). The build prints it again with line breaks but keeps its short names, so after `npm run build` Pele takes about 934 KB of the 953 KB `extension.js` (about 287 KB gzipped). The extension's own code is the other 19 KB or so, readable and unminified (source in `src/`).
+[`pele@1.13.0`](https://www.npmjs.com/package/pele) (MIT), bundled into `extension.js`. Pele ships minified only (its `dist/pele.js` is about 729 KB). The build prints it again with line breaks but keeps its short names, so after `npm run build` Pele takes about 1,005 KB of the 1,024 KB `extension.js` (about 311 KB gzipped). The extension's own code is the other 19 KB or so, readable and unminified (source in `src/`).
 
 ## License
 
