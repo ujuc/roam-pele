@@ -16,6 +16,14 @@ procedure.
 
 ### 0.2.0: Pele 1.6.0 → 1.13.0
 
+Published: submitted 2026-11-03 as
+[Roam-Research/roam-depot#1516](https://github.com/Roam-Research/roam-depot/pull/1516)
+from the fork branch `ujuc:update-roam-pele-0.2.0`, with `source_commit`
+`b02c42c` (the merge of ujuc/roam-pele#4). Depot's build passed, the bot gave
+PR-shorthand `ujuc+roam-pele+1516`, and it was merged 2026-11-04 (`7d0c232`)
+with no review comments. [`roam-pele.json`](roam-pele.json) now has
+`b02c42c`.
+
 Measured on the branch before merging (Linux, Node 22):
 
 - `npm run check`, `npm test` (38 pass) and `./build.sh` succeed. Two cold
