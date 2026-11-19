@@ -5,6 +5,7 @@ import { createCodeTarget } from "./targets/code.ts";
 import type { Target } from "./targets/hosts.ts";
 import { createMermaidTarget } from "./targets/mermaid.ts";
 import { createPeleTarget } from "./targets/pele.ts";
+import { closeViewer } from "./viewer.ts";
 
 let stop: (() => void) | undefined;
 
@@ -72,6 +73,7 @@ export default {
       disconnect();
       for (const [name, target] of targets) guarded(name, () => target.dispose());
       targets.clear();
+      closeViewer();
       // A failed dispose can leave hosts behind.
       document.querySelectorAll("[data-roam-pele]").forEach((e) => e.remove());
       // Only clear our own marker; a newer instance may have replaced it.
