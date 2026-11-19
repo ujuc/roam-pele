@@ -10,7 +10,7 @@ It handles three kinds of diagram:
 
 ## `{{[[mermaid]]}}` blocks
 
-Write them as you always have, with the Mermaid source in the child blocks. Pele draws the diagram and Roam's own frame is hidden while Pele's drawing is showing. An Edit button appears at the top right when you hover the diagram, to get back into edit mode.
+Write them as you always have, with the Mermaid source in the child blocks. Pele draws the diagram and Roam's own frame is hidden while Pele's drawing is showing. An Edit button appears at the top right when you hover the diagram, to get back into edit mode, next to an Enlarge button (see [Enlarging a diagram](#enlarging-a-diagram)).
 
 - Roam still loads and runs mermaid.js behind the hidden frame, so this is **not faster** than before.
 - If Pele cannot draw a diagram (for example a syntax Pele does not support), Roam's own drawing is shown instead.
@@ -53,6 +53,16 @@ The preview updates as you type. Code blocks that are the source of a `{{[[merma
 
 When you leave the editor, Roam rewrites a ```` ```mermaid ```` block to ```` ```javascript ```` and moves `mermaid` to the first line of the body. This is harmless: the preview recognises both forms and keeps working. The extension does not try to prevent it.
 
+## Enlarging a diagram
+
+Diagrams follow the block width, so in a narrow block they can be too small to read. Hover a diagram and press the Enlarge button at the top right (code block previews have it too) to open it in a full-window view:
+
+- Pele lays the diagram out again for the wider space, so a flowchart may turn from top-down to left-right.
+- Zoom with the +/− buttons, Ctrl/⌘ + wheel or a trackpad pinch, or double-click. Drag to pan once zoomed in.
+- Esc, the close button at the top left, or a click outside the diagram closes the view.
+
+The view shows the diagram as it was when opened; close and reopen it to see later edits. The button is hidden while there is nothing to show (an empty `{{[[pele]]}}`, or a Pele error).
+
 ## Settings
 
 The "Pele" tab in the extension settings:
@@ -77,7 +87,7 @@ Changes apply without reloading. Disabling the extension also restores Roam's ow
 - Pele targets Mermaid 12.1.0 syntax, while Roam ships mermaid 11.4.1, so a diagram can work in one and not the other. For `{{[[mermaid]]}}`, Roam's own drawing is then shown.
 - Colours follow Roam's light palette, and dark colours are set for the `bp3-dark`, `rs-dark`, `rm-dark-theme` and `roamjs-custom-dark-theme` classes. There is no other dark mode detection.
 - The extension relies on Roam's undocumented page structure and may need updating when Roam changes it.
-- Not supported: dragging to resize, Roam's fullscreen button, zoom and export.
+- Not supported: dragging to resize, Roam's fullscreen button, zoom inside the block, and export. Use the Enlarge button instead.
 - Phone app: not verified. The checks so far were done in the Roam web app in Chrome.
 
 ## Privacy
