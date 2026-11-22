@@ -20,16 +20,73 @@
   width: 100%;
 }
 
-.roam-pele__edit {
+.roam-pele__actions {
   position: absolute;
   top: 0;
   right: 0;
+  z-index: 1;
+  display: flex;
   opacity: 0;
 }
 
-.roam-pele:hover .roam-pele__edit,
-.roam-pele__edit:focus-visible {
+.roam-pele:hover .roam-pele__actions,
+.roam-pele__actions:focus-within {
   opacity: 1;
+}
+
+/* Nothing to enlarge while the host shows a hint, an error or nothing. */
+.roam-pele:not(:has(.roam-pele__diagram > svg)) .roam-pele__expand {
+  display: none;
+}
+
+/* Full-window view. Colours and font are copied inline from the diagram it opened from. */
+.roam-pele-viewer {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  padding: 24px;
+  background: rgba(16, 22, 26, 0.7);
+}
+
+.roam-pele-viewer__panel {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  overflow: auto;
+  box-sizing: border-box;
+  padding: 40px 24px 24px;
+  border-radius: 6px;
+  background: var(--pele-bg);
+  color: var(--pele-fg);
+}
+
+.roam-pele-viewer__close {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+}
+
+.bp3-dark .roam-pele-viewer__close,
+.rs-dark .roam-pele-viewer__close,
+.rm-dark-theme .roam-pele-viewer__close,
+.roamjs-custom-dark-theme .roam-pele-viewer__close {
+  color: var(--pele-fg);
+}
+
+/* At least the panel's height: Pele's zoom pans inside the larger of the SVG and this box.
+   The SVG is sized to fit by viewer.ts and centred here. */
+.roam-pele-viewer__diagram {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100%;
+  outline: none;
+}
+
+.roam-pele-viewer__diagram > svg {
+  flex: none;
 }
 
 .roam-pele--code {
