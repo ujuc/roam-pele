@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.3.0
 
 - Add an Enlarge button next to Edit (and on code block previews) that opens the diagram in a full-window view. The diagram is laid out again for the wider space, then scaled to fit the window (up to 3×) and centred, and Pele's zoom works there: the +/− buttons, Ctrl/⌘ + wheel or pinch, double-click, and drag to pan. Esc, the close button or a click outside closes it. Diagrams inside blocks still have zoom off.
 
