@@ -14,6 +14,53 @@ change into `main` here, then open a roam-depot PR that changes only
 Depot's README covers only the first submission; it has no separate update
 procedure.
 
+### 0.3.0: Enlarge button
+
+Status: preparing. Adds the Enlarge button (ujuc/roam-pele#7): a full-window
+view of a diagram, laid out again for the wider space, scaled to fit (up to
+3×) and centred, with Pele's zoom on inside that view only. Pele stays at
+1.13.0 (still the latest on npm).
+
+Measured on `release-0.3.0` before merging (macOS arm64, Node 26):
+
+- `npm run check`, `npm test` (38 pass) and `./build.sh` succeed. Two cold
+  builds give the same SHA-256 `4fb9a24d…4adae9`.
+- `extension.js` is 1,027,628 bytes (~312 kB gzipped): Pele 1,004,917 bytes
+  (unchanged), own code 22,711 bytes (+3,791, mostly `src/viewer.ts`).
+- Still no `import()`, `eval`, `new Function`, `fetch`, `XMLHttpRequest`,
+  `sendBeacon`, `WebSocket` or `EventSource` in `extension.js` (checked with
+  `rg`; `scripts/check-bundle.sh` uses `grep -P`, which macOS grep lacks, so
+  it only really runs in CI).
+- What reviewers may ask about: the viewer is a `div` the extension appends
+  to `document.body` (`.roam-pele-viewer`, CSS scoped like the rest), built
+  with `createElement`, removed on close and on unload. It stops `mousedown`
+  inside the overlay from reaching Roam, and listens for `keydown` on
+  `document` only while open. No graph writes, settings or permissions
+  change.
+- Checked by the user in Roam via developer mode (Enlarge opens, fits and
+  centres). Not yet checked from the Depot-built artifact.
+
+Steps: as for 0.2.0 below, with the PR titled "Update Mermaid with Pele to
+0.3.0". After the bot posts the PR-shorthand, check Enlarge on
+`{{[[mermaid]]}}`, `{{[[pele]]}}` and a code block preview, dark theme, and
+that unload closes an open viewer.
+
+Draft PR description:
+
+> Update Mermaid with Pele (`ujuc/roam-pele`) to 0.3.0
+>
+> - Adds an Enlarge button next to Edit (and on code block previews) that
+>   opens the diagram in a full-window view: laid out again for the wider
+>   space, scaled to fit and centred, with Pele's zoom (+/−, Ctrl/⌘ + wheel or
+>   pinch, double-click, drag to pan). Esc, the close button or a click
+>   outside closes it. Diagrams inside blocks still have zoom off.
+> - The view is the extension's own element on `document.body`, removed on
+>   close and on unload. No graph writes, settings or permissions change.
+>   Still no remotely loaded code and no network requests of its own.
+> - Bundled Pele unchanged (1.13.0). `extension.js` grows from about
+>   1,024 kB to about 1,028 kB; the extension's own code is about 23 kB,
+>   unminified.
+
 ### 0.2.0: Pele 1.6.0 → 1.13.0
 
 Published: submitted 2026-11-03 as
