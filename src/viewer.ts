@@ -18,6 +18,9 @@ const INHERITED = [
   "font-size",
 ] as const;
 
+// Upper bound for the initial fit, so a one-node diagram does not fill the whole window.
+const MAX_FIT = 3;
+
 const sources = new WeakMap<HTMLElement, string>();
 
 /** Remembers what a diagram element currently shows, so the viewer can draw it again. */
@@ -59,7 +62,33 @@ export const openViewer = (diagram: HTMLElement): void => {
   document.body.append(overlay);
 
   const fontSize = parseFloat(computed.fontSize) || 16;
-  const mounted = mount(canvas, source, { zoom: { always: true, maxScale: 6 }, fontSize });
+  let mounted: ReturnType<typeof mount> | undefined;
+
+  // Scale the SVG to fit the panel (centred by CSS). Pele's zoom takes the SVG's
+  // size when it refreshes as its fit and reset size, so reset first, size, then refresh.
+  const fit = (): void => {
+    const svg = canvas.firstElementChild;
+    if (!(svg instanceof SVGSVGElement)) return;
+    const width = Number(svg.getAttribute("width"));
+    const height = Number(svg.getAttribute("height"));
+    if (!(width > 0 && height > 0)) return;
+    const style = getComputedStyle(panel);
+    const availWidth = canvas.clientWidth;
+    const availHeight =
+      panel.clientHeight - (parseFloat(style.paddingTop) || 0) - (parseFloat(style.paddingBottom) || 0);
+    const scale = Math.min(availWidth / width, availHeight / height, MAX_FIT);
+    if (!(scale > 0)) return;
+    mounted?.zoom?.reset();
+    svg.style.width = `${width * scale}px`;
+    svg.style.height = `${height * scale}px`;
+    mounted?.zoom?.refresh();
+  };
+
+  // onRender runs inside mount() on the first draw, before `mounted` is set; fit() runs again below.
+  mounted = mount(canvas, source, { zoom: { always: true, maxScale: 6 }, fontSize, onRender: fit });
+  fit();
+  const resizeObserver = new ResizeObserver(() => fit());
+  resizeObserver.observe(panel);
 
   // Pele handles Esc first (reset zoom) and marks it handled; only an unhandled Esc closes.
   const onKey = (e: KeyboardEvent): void => {
@@ -86,7 +115,8 @@ export const openViewer = (diagram: HTMLElement): void => {
   close = () => {
     close = null;
     document.removeEventListener("keydown", onKey);
-    mounted.destroy();
+    resizeObserver.disconnect();
+    mounted?.destroy();
     overlay.remove();
     previous?.focus({ preventScroll: true });
   };

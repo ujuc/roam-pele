@@ -58,6 +58,7 @@ When you leave the editor, Roam rewrites a ```` ```mermaid ```` block to ```` ``
 Diagrams follow the block width, so in a narrow block they can be too small to read. Hover a diagram and press the Enlarge button at the top right (code block previews have it too) to open it in a full-window view:
 
 - Pele lays the diagram out again for the wider space, so a flowchart may turn from top-down to left-right.
+- The diagram is scaled to fit the window (at most 3× its normal size) and centred. Very tall diagrams are shrunk to fit; zoom in to read them.
 - Zoom with the +/− buttons, Ctrl/⌘ + wheel or a trackpad pinch, or double-click. Drag to pan once zoomed in.
 - Esc, the close button at the top left, or a click outside the diagram closes the view.
 

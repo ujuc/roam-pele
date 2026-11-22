@@ -74,11 +74,19 @@
   color: var(--pele-fg);
 }
 
-/* At least the panel's height: Pele's zoom pans inside the larger of the SVG and this box. */
+/* At least the panel's height: Pele's zoom pans inside the larger of the SVG and this box.
+   The SVG is sized to fit by viewer.ts and centred here. */
 .roam-pele-viewer__diagram {
   box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   min-height: 100%;
   outline: none;
+}
+
+.roam-pele-viewer__diagram > svg {
+  flex: none;
 }
 
 .roam-pele--code {
